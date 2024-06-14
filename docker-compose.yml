@@ -1,0 +1,8 @@
+name: my-vertx-docker-example
+version: 0.1
+services:
+  my-vertx-docker-example-jar-with-dependencies.jar:
+    build: .
+    ports:
+      - 8080:8080
+    image: my-vertx-docker-example-jar-with-dependencies.jar
