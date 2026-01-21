@@ -1,5 +1,4 @@
 name: my-vertx-docker-example
-version: 0.1
 services:
   my-vertx-docker-example-jar-with-dependencies.jar:
     build: .
