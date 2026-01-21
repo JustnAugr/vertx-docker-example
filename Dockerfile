@@ -23,7 +23,7 @@ RUN $JAVA_HOME/bin/jdeps \
 	--recursive \
 	--multi-release 24 \
 	--print-module-deps \
-	--class-path 'src/*' \
+	--class-path '/target/classes*' \
 	target/$JAR_NAME > deps.info
 
 ## Then use jlink to create the custom JRE
