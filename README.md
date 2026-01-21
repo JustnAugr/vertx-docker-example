@@ -26,5 +26,5 @@ woah - if you round down, that's basically 0MB!
 
 
 ## Thanks to:
-https://medium.com/@RoussiAbdelghani/optimizing-java-base-docker-images-size-from-674mb-to-58mb-c1b7c911f622
-https://snyk.io/blog/jlink-create-docker-images-spring-boot-java/
+* https://medium.com/@RoussiAbdelghani/optimizing-java-base-docker-images-size-from-674mb-to-58mb-c1b7c911f622
+* https://snyk.io/blog/jlink-create-docker-images-spring-boot-java/
