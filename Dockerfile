@@ -2,10 +2,10 @@
 #https://medium.com/@RoussiAbdelghani/optimizing-java-base-docker-images-size-from-674mb-to-58mb-c1b7c911f622
 #https://snyk.io/blog/jlink-create-docker-images-spring-boot-java/
 
-#build the custom JRE first
-FROM eclipse-temurin:24-jdk-alpine AS build
+#build the custom JRE first from maven temurin on jdk 24
+FROM maven:3.9-eclipse-temurin-24-alpine AS build
 
-ENV JAR_NAME=my-vertx-docker-example-jar-with-dependencies.jar
+ENV JAR_NAME=my-vertx-docker-example.jar
 
 #install binutils, required by jlink
 RUN apk update && apk add binutils
@@ -15,6 +15,10 @@ RUN mkdir app/
 COPY . app/
 WORKDIR app/
 
+#mvn package to package our deps and create our jar
+#deps are important to use in our classpath, but also for jdeps
+RUN mvn package
+
 # Build small JRE image via jdeps and jlink
 ## First use jdeps to get the deps and output into a file
 RUN $JAVA_HOME/bin/jdeps \
@@ -23,7 +27,8 @@ RUN $JAVA_HOME/bin/jdeps \
 	--recursive \
 	--multi-release 24 \
 	--print-module-deps \
-	--class-path '/target/classes/*' \
+	--module-path 'target/lib/*' \
+	--class-path 'target/lib/*' \
 	target/$JAR_NAME > deps.info
 
 ## Then use jlink to create the custom JRE
@@ -50,15 +55,16 @@ ARG APPLICATION_USER=vertx
 # Create a user to run the application, don't run as root
 RUN addgroup --system $APPLICATION_USER &&  adduser --system $APPLICATION_USER --ingroup $APPLICATION_USER
 
-# Create the application directory
+# Create the application directory, copy over our jar and deps
 RUN mkdir /app && chown -R $APPLICATION_USER /app
-
-COPY --chown=$APPLICATION_USER:$APPLICATION_USER target/*-with-dependencies.jar /app/app.jar
+COPY --from=build --chown=$APPLICATION_USER:$APPLICATION_USER /app/target/*.jar /app/app.jar
+COPY --from=build --chown=$APPLICATION_USER:$APPLICATION_USER /app/target/lib /app/lib
 
 # Set the working directory
 WORKDIR /app
 
 USER $APPLICATION_USER
 
-ENTRYPOINT ["java", "-jar","/app/app.jar"]
+#run with all our deps in our classpath
+ENTRYPOINT ["java", "-cp", "app.jar:lib/*", "org.example.Main"]
 EXPOSE 8080
