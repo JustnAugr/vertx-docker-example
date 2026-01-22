@@ -3,7 +3,6 @@
 ## Running
 just run:
 ```
-mvn install
 docker compose up
 ```
 and then open up localhost:8080!
@@ -15,9 +14,7 @@ docker compose down
 
 ## How it works
 
-* maven install to create the fat jar w/ deps via the pom.xml plugin
-* docker-compose handles both the build and run via the .yml & the Dockerfile
-* jdeps and jlink to create a minimal JRE
+docker-compose handles everything via the dockerfile: packaging maven deps, creating a minimal JRE, and then running our program
 
 ## The Results
 <img width="775" height="85" alt="image" src="https://github.com/user-attachments/assets/cd090f00-6b36-4ecd-8d15-48758af2a294" />
