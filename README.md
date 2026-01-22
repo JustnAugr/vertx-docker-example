@@ -20,7 +20,7 @@ docker compose down
 * jdeps and jlink to create a minimal JRE
 
 ## The Results
-<img width="775" height="46" alt="image" src="https://github.com/user-attachments/assets/44e9e211-2c53-4066-927a-0c5a8f645bff" />
+<img width="775" height="85" alt="image" src="https://github.com/user-attachments/assets/cd090f00-6b36-4ecd-8d15-48758af2a294" />
 
 woah - if you round down, that's basically 0MB!
 
